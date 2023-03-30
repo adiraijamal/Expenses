@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<body>
+    {% for key, value in data.items %}
+    <h3>{{ value.month }} Total   :<a style="color: {% if value.total < 0 %}red{% else %}green{% endif %}">{{ value.total | floatformat:"2g" }}</a></h3>
+    <table border="2" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Details</th>
+            <th>Category</th>
+            <th>Sub Details</th>
+            <th>Pay Mode</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for obj in value.qs %}
+        <tr>
+            <td>{{ obj.trans_id }}</td>
+            <td>{{ obj.trans_date }}</td>
+            <td>{{ obj.trans_sub_category }}</td>
+            <td>{{ obj.trans_main_category }}</td>
+            <td>{{ obj.trans_details }}</td>
+            <td>{{ obj.trans_mode }}</td>
+            <td style="color: {% if obj.trans_amount < 0 %}red{% else %}green{% endif %}">
+                {{ obj.trans_amount|floatformat:"2g" }}
+            </td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+            <td colspan="6">Total</td>
+            <td style="color: {% if value.total < 0 %}red{% else %}green{% endif %}">{{ value.total | floatformat:"2g" }}</td>
+        </tr>
+    </table>
+    {% endfor %}
+</body>
+{% endblock %}
