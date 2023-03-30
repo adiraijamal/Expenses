@@ -1,5 +1,6 @@
 <ul>
     <li><a href="{% url 'dailytrans:index' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
     <li><a href="{% url 'dailytrans:report_monthwise' %}">Monthly Report</a></li>
+    <li><a href="{% url 'dailytrans:add_trans' %}">Add Transaction</a></li>
     <li style="float:right"><a href="{% url 'admin:index' %}">Admin</a></li>
 </ul>
