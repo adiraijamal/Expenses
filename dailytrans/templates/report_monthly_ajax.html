@@ -1,95 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h2>Monthly Report (Ajax)</h2>
+    <label for="month-select">Select Month:</label>
+    <select id="month-select">
+        <option value="1">Jan</option>
+        <option value="2">Feb</option>
+        <option value="3">Mar</option>
+        <option value="4">Apr</option>
+        <option value="5">May</option>
+        <option value="6">Jun</option>
+        <option value="7">Jul</option>
+        <option value="8">Aug</option>
+        <option value="9">Sep</option>
+        <option value="10">Oct</option>
+        <option value="11">Nov</option>
+        <option value="12">Dec</option>
+    </select>
+    <button id="report-monthly-ajax-btn">Get Report</button>
 
-<body>
-<select id="report-monthly-month" name="month">
-  {% for month, month_name in MONTH_CHOICES %}
-    <option value="{{ month }}">{{ month_name }}</option>
-  {% endfor %}
-</select>
-    <button id="load-btn">Load</button>
-    <br><br>
-    <h3 id="total"></h3>
-    <table border="2" style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Details</th>
-                <th>Category</th>
-                <th>Sub Details</th>
-                <th>Pay Mode</th>
-                <th>Amount</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-          {% for transaction in transactions %}
-          <tr>
-              <td>{{ transaction.trans_id }}</td>
-              <td>{{ transaction.trans_date }}</td>
-              <td>{{ transaction.details }}</td>
-              <td>{{ transaction.category }}</td>
-              <td>{{ transaction.sub_details }}</td>
-              <td>{{ transaction.pay_mode }}</td>
-              <td>{{ transaction.trans_amount }}</td>
-          </tr>
-          {% endfor %}
-          <tr>
-              <td colspan="6">Total:</td>
-              <td>{{ total }}</td>
-          </tr>
-          
-        </tbody>
-    </table>
-</body>
+    <div id="report-monthly-ajax-container"></div>
 
-<script>
-    document.getElementById('load-btn').addEventListener('click', function() {
-        var month = document.getElementById('month-select').value;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/report_monthwise_data/' + month);
-        xhr.onload = function() {
-            var data = JSON.parse(xhr.responseText);
-            var tableBody = document.getElementById('table-body');
-            tableBody.innerHTML = '';
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const monthSelect = document.querySelector('#month-select');
+        const reportContainer = document.querySelector('#report-monthly-ajax-container');
+        const getReportBtn = document.querySelector('#report-monthly-ajax-btn');
 
-            for (var i = 0; i < data.length; i++) {
-                var row = document.createElement('tr');
-                var trans_id_cell = document.createElement('td');
-                trans_id_cell.innerHTML = data[i].trans_id;
-                row.appendChild(trans_id_cell);
+        monthSelect.addEventListener('change', function() {
+          const selectedMonth = monthSelect.value;
+          fetch(`/report_monthwise_ajax/${selectedMonth}`)
+            .then(response => response.json())
+            .then(data => {
+              const transactions = data.transactions;
+              const total = data.total;
+              let tableHtml = '<table>';
+              tableHtml += '<thead><tr><th>Transaction ID</th><th>Date</th><th>Description</th><th>Amount</th></tr></thead>';
+              tableHtml += '<tbody>';
+              for (let i = 0; i < transactions.length; i++) {
+                tableHtml += `<tr><td>${transactions[i].trans_date}</td><td>${transactions[i].trans_type}</td><td>${transactions[i].trans_amount}</td></tr>`;
+              }
+              tableHtml += '</tbody>';
+              tableHtml += `<tfoot><tr><td colspan="3">Total</td><td>${total}</td></tr></tfoot>`;
+              tableHtml += '</table>';
+              reportContainer.innerHTML = tableHtml;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        });
 
-                var trans_date_cell = document.createElement('td');
-                trans_date_cell.innerHTML = data[i].trans_date;
-                row.appendChild(trans_date_cell);
-
-                var details_cell = document.createElement('td');
-                details_cell.innerHTML = data[i].details;
-                row.appendChild(details_cell);
-
-                var category_cell = document.createElement('td');
-                category_cell.innerHTML = data[i].category;
-                row.appendChild(category_cell);
-
-                var sub_details_cell = document.createElement('td');
-                sub_details_cell.innerHTML = data[i].sub_details;
-                row.appendChild(sub_details_cell);
-
-                var pay_mode_cell = document.createElement('td');
-                pay_mode_cell.innerHTML = data[i].pay_mode;
-                row.appendChild(pay_mode_cell);
-
-                var amount_cell = document.createElement('td');
-                amount_cell.innerHTML = data[i].trans_amount;
-                row.appendChild(amount_cell);
-
-                tableBody.appendChild(row);
-            }
-            document.getElementById('total').innerHTML = 'Total: ' + data.total;
-        };
-        xhr.send();
-    });
+        getReportBtn.addEventListener('click', function() {
+          const selectedMonth = monthSelect.value;
+          fetch(`/report_monthwise_ajax/${selectedMonth}`)
+            .then(response => response.json())
+            .then(data => {
+              const transactions = data.transactions;
+              const total = data.total;
+              let tableHtml = '<table>';
+              tableHtml += '<thead><tr><th>Transaction ID</th><th>Date</th><th>Description</th><th>Amount</th></tr></thead>';
+              tableHtml += '<tbody>';
+              for (let i = 0; i < transactions.length; i++) {
+                tableHtml += `<tr><td>${transactions[i].id}</td><td>${transactions[i].trans_date}</td><td>${transactions[i].trans_desc}</td><td>${transactions[i].trans_amount}</td></tr>`;
+              }
+              tableHtml += '</tbody>';
+              tableHtml += `<tfoot><tr><td colspan="3">Total</td><td>${total}</td></tr></tfoot>`;
+              tableHtml += '</table>';
+              reportContainer.innerHTML = tableHtml;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        });
+      });
 </script>
 
 {% endblock %}
