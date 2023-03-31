@@ -22,5 +22,4 @@ def report_monthwise(request):
         }
 
     context = {'data': data}
-    print(context)
     return render(request, 'report_monthwise.html', context)
