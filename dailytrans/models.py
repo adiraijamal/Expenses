@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class MainCategory(models.Model):
@@ -36,16 +37,19 @@ class Transactions(models.Model):
         ('cash', 'Cash'),
         ('enbd', 'ENBD'),
         ('nol', 'NOL'),
-        ('payit','Pay IT'),
+        ('payit', 'Pay IT'),
         ('sib', 'SIB'),
     )
 
     trans_id = models.AutoField(primary_key=True)
     trans_date = models.DateField(verbose_name="Date", db_index=True)
     trans_type = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES, verbose_name="Type")
-    trans_main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, verbose_name="Main Category", related_name="transactions")
-    trans_sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name="Sub Category", related_name="transactions")
-    trans_mode = models.CharField(max_length=10, choices=PAYMENT_MODE_CHOICES, verbose_name="Payment Mode", db_index=True)
+    trans_main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, verbose_name="Main Category",
+                                            related_name="transactions")
+    trans_sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name="Sub Category",
+                                           related_name="transactions")
+    trans_mode = models.CharField(max_length=10, choices=PAYMENT_MODE_CHOICES, verbose_name="Payment Mode",
+                                  db_index=True)
     trans_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
 
     objects = models.Manager()
@@ -58,7 +62,7 @@ class Transactions(models.Model):
         amount = self.trans_amount
         if self.trans_type == 'expense':
             amount = -amount
-        amount_str = f"${amount:,.2f}"
+            amount_str = f"${amount:,.2f}"
 
         return (
             f"Transaction ID: {self.trans_id}\n"

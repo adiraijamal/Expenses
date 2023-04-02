@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dailytrans.apps.DailytransConfig',
-    'django_tables2',
-
 ]
 
 MIDDLEWARE = [

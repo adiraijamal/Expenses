@@ -1,12 +1,12 @@
 from django import forms
 from django.utils import timezone
-from django.forms.widgets import DateInput
 from dailytrans.models import Transactions, MainCategory, SubCategory
 
 TRANSACTION_TYPE_CHOICES = [
     ('income', 'Income'),
     ('expense', 'Expense'),
 ]
+
 
 class AddTransactionForm(forms.ModelForm):
     trans_date = forms.DateField(initial=timezone.now().date(), widget=forms.DateInput(attrs={'type': 'date'}))

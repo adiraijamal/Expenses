@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Min, Sum
-import calendar
+from django.db.models import Sum
 from dailytrans.models import Transactions
+import calendar
 
 
 def report_monthwise(request):
