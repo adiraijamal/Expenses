@@ -1,1 +1,1 @@
-from .add_trans import AddTransactionForm
+from .add_transaction import AddTransactionForm

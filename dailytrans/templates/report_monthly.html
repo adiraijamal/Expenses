@@ -61,7 +61,7 @@
         var month = $(this).val();
         if (month) {
           $.ajax({
-            url: "{% url 'dailytrans:report_monthly_ajax' month=1 %}".replace('1', month),
+            url: "{% url 'dailytrans:report_monthly_ajax' month=selected_month %}".replace('selected_month', month),
             dataType: 'json',
             success: function (response) {
               $('#transaction-data').empty();

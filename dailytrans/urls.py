@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, report_monthwise, report_monthly_ajax, add_trans
+from dailytrans.views import index, add_transaction, report_monthwise, report_monthly_ajax
 
 app_name = 'dailytrans'
 
@@ -7,5 +7,5 @@ urlpatterns = [
     path('', index, name='index'),
     path('report_monthwise/', report_monthwise, name='report_monthwise' ),
     path('report_monthly_ajax/<int:month>/', report_monthly_ajax, name='report_monthly_ajax'),
-    path('add_trans/', add_trans, name='add_trans'),
+    path('add_transaction/', add_transaction, name='add_transaction'),
 ]

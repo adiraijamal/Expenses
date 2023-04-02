@@ -1,4 +1,5 @@
+from dailytrans.forms import AddTransactionForm
+from .add_transaction import add_transaction
 from .index import index
-from .add_trans import add_trans
-from .report_monthly_ajax import report_monthly_ajax
 from .report_monthwise import report_monthwise
+from .report_monthly_ajax import report_monthly_ajax

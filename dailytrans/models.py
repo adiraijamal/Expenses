@@ -41,11 +41,11 @@ class Transactions(models.Model):
     )
 
     trans_id = models.AutoField(primary_key=True)
-    trans_date = models.DateField(verbose_name="Date")
+    trans_date = models.DateField(verbose_name="Date", db_index=True)
     trans_type = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES, verbose_name="Type")
     trans_main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, verbose_name="Main Category", related_name="transactions")
     trans_sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name="Sub Category", related_name="transactions")
-    trans_mode = models.CharField(max_length=10, choices=PAYMENT_MODE_CHOICES, verbose_name="Payment Mode")
+    trans_mode = models.CharField(max_length=10, choices=PAYMENT_MODE_CHOICES, verbose_name="Payment Mode", db_index=True)
     trans_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
 
     objects = models.Manager()
@@ -69,4 +69,3 @@ class Transactions(models.Model):
             f"Payment Mode: {self.trans_mode}\n"
             f"Amount: ${self.trans_amount:,.2f}"
         )
-        
