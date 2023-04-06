@@ -4,7 +4,7 @@ from django.shortcuts import render
 from dailytrans.models import Transactions
 
 
-def report_monthwise(request):
+def transaction_summary(request):
     months = Transactions.objects.values('trans_date__month').distinct()
     data = {}
     running_total = 0
@@ -44,4 +44,4 @@ def report_monthwise(request):
 
     context = {'data': data}
 
-    return render(request, 'report_monthwise.html', context)
+    return render(request, 'test2.html', context)

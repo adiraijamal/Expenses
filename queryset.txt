@@ -1,0 +1,25 @@
+{'totals': 
+<QuerySet [
+{'trans_mode': 'Cash', 'month': datetime.date(2023, 1, 1), 'tot': Decimal('99.25')}, 
+{'trans_mode': 'Cash', 'month': datetime.date(2023, 2, 1), 'tot': Decimal('161.25')}, 
+{'trans_mode': 'Cash', 'month': datetime.date(2023, 3, 1), 'tot': Decimal('40.5')}, 
+{'trans_mode': 'ENBD', 'month': datetime.date(2023, 1, 1), 'tot': Decimal('2215.72000000000')}, 
+{'trans_mode': 'ENBD', 'month': datetime.date(2023, 2, 1), 'tot': Decimal('1361.66000000000')}, 
+{'trans_mode': 'ENBD', 'month': datetime.date(2023, 3, 1), 'tot': Decimal('-579.130000000000')}, 
+{'trans_mode': 'NoL', 'month': datetime.date(2023, 1, 1), 'tot': Decimal('107')}, 
+{'trans_mode': 'NoL', 'month': datetime.date(2023, 2, 1), 'tot': Decimal('56')}, 
+{'trans_mode': 'NoL', 'month': datetime.date(2023, 3, 1), 'tot': Decimal('-69.5')}, 
+{'trans_mode': 'Pay IT', 'month': datetime.date(2023, 1, 1), 'tot': Decimal('0')}, 
+{'trans_mode': 'SIB', 'month': datetime.date(2023, 1, 1), 'tot': Decimal('208.390000000000')}, 
+{'trans_mode': 'SIB', 'month': datetime.date(2023, 2, 1), 'tot': Decimal('-3.25')}
+]>}
+
+
+
+Trans Mode | Jan 2023 | Feb 2023 | Mar 2023
+---------- | -------- | -------- | --------
+Cash       | 99.25    | 161.25   | 40.5
+ENBD       | 2215.72  | 1361.66  | -579.13
+NoL        | 107      | 56       | -69.5
+Pay IT     |          |          |
+SIB        | 208.39   | -3.25    |

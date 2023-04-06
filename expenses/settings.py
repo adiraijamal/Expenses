@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dailytrans.apps.DailytransConfig',
-]
+    'dailytrans.templatetags',
+ ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,6 +67,10 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+APP_DIRS_TEMPLATE = [
+    'dailytrans.templatetags',
 ]
 
 WSGI_APPLICATION = 'expenses.wsgi.application'

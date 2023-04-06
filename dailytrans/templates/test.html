@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table border="2">
+  <tr>
+    <td>Trans Mode</td>
+    {% for month_data in data.values %}
+      <td>{{ month_data.month }}</td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>Cash</td>
+    {% for month_data in data.values %}
+      <td><b>{{ month_data.running_total_modes.Cash|default:"0" | floatformat:"2g" }}</b></td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>Enbd</td>
+    {% for month_data in data.values %}
+      <td><b>{{ month_data.running_total_modes.ENBD|default:"0" | floatformat:"2g" }}</b></td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>NoL</td>
+    {% for month_data in data.values %}
+      <td><b>{{ month_data.running_total_modes.NoL|default:"0" | floatformat:"2g" }}</b></td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>Pay IT</td>
+    {% for month_data in data.values %}
+      <td><b>{{ month_data.running_total_modes.PayIT|default:"0" | floatformat:"2g" }}</b></td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>SIB</td>
+    {% for month_data in data.values %}
+      <td><b>{{ month_data.running_total_modes.SIB|default:"0" | floatformat:"2g" }}</b></td>
+    {% endfor %}
+  </tr>
+</table>
+
+{% endblock %}
