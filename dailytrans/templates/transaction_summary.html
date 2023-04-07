@@ -3,48 +3,54 @@
 {% block content %}
 <h3>Transaction Summary</h3>
 <table border="2">
-  <tr>
-    <td>Trans Mode</td>
-    {% for month_data in data.values %}
-      <td>{{ month_data.month }}</td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>Cash</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total_modes.Cash|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>Enbd</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total_modes.ENBD|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>NoL</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total_modes.NoL|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>Pay IT</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total_modes.PayIT|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>SIB</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total_modes.SIB|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
-  <tr>
-    <td>Total</td>
-    {% for month_data in data.values %}
-      <td><b>{{ month_data.running_total|default:"0" | floatformat:"2g" }}</b></td>
-    {% endfor %}
-  </tr>
+  <thead>
+    <tr>
+      <th></th>
+      {% for month in months %}
+        {% if month in month_totals %}
+          <th colspan="3">{{ month }}</th>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    <tr>
+      <th></th>
+      {% for month in months %}
+        {% if month in month_totals %}
+          <th>Income</th>
+          <th>Expenses</th>
+          <th>Balance</th>
+        {% endif %}
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+{% for mode, mode_name in Transaction.PAYMENT_MODE_CHOICES %}
+    <tr>
+        <td>{{ mode_name }}</td>
+        {% for month in months %}
+            {% if month in month_totals %}
+                {% with mode_data=transactions.filter(trans_mode=mode, trans_date__month=month_num[month]) %}
+                    {% if mode_data.exists %}
+                        {% with income=mode_data.filter(trans_type='income').aggregate(Sum('trans_amount'))['trans_amount__sum']|default:0 %}
+                            <td>{{ income|floatformat:2 }}</td>
+                        {% endwith %}
+                        {% with expenses=mode_data.filter(trans_type='expense').aggregate(Sum('trans_amount'))['trans_amount__sum']|default:0 %}
+                            <td>{{ expenses|floatformat:2 }}</td>
+                        {% endwith %}
+                        <td>{{ (income - expenses)|floatformat:2 }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endwith %}
+            {% else %}
+                <td></td>
+                <td></td>
+                <td></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}

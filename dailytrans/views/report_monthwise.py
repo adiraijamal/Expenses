@@ -9,6 +9,7 @@ def report_monthwise(request):
     data = {}
     running_total = 0
     running_total_modes = {}
+    monthly_balance = 0
     for obj in months:
         month = calendar.month_name[obj['trans_date__month']]
         qs = (
@@ -18,6 +19,7 @@ def report_monthwise(request):
         )
         total_modes = {}
         for trans in qs:
+            monthly_balance += trans.trans_amount
             running_total += trans.trans_amount
             trans.running_total = running_total
             # Update running total for each trans_mode
@@ -38,6 +40,7 @@ def report_monthwise(request):
             'qs': qs,
             'total': amount['total'],
             'total_modes': total_modes,
+            'monthly_balance': monthly_balance,
             'running_total': running_total,
             'running_total_modes': running_total_modes.copy()  # Make a copy to avoid modifying the running total dict
         }

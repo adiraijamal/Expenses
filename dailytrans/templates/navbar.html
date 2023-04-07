@@ -1,9 +1,10 @@
-<ul>
+<nav class="navbar">
+  <ul class="navbar-menu">
     <li><a href="{% url 'dailytrans:index' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
     <li><a href="{% url 'dailytrans:report_monthwise' %}">Monthly Report</a></li>
     <li><a href="{% url 'dailytrans:add_transaction' %}">Add</a></li>
-    <li><a href="{% url 'dailytrans:transaction_summary' %}">Transaction Summary</a>
-</li>
-
-    <li style="float:right"><a href="{% url 'admin:index' %}">Admin</a></li>
-</ul>
+    <li><a href="{% url 'dailytrans:transaction_summary' %}">Transaction Summary</a></li>
+    <li style="margin-left: auto;"><a href="{% url 'admin:index' %}">Admin</a></li>
+  </ul>
+</nav>
+    <li style="margin-left: auto;"><a href="{% url 'admin:index' %}">Admin</a></li>

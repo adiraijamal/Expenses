@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+  <thead>
+    <tr>
+      <th rowspan="2">Trans Mode</th>
+      <th colspan="3">January 2023</th>
+      <th colspan="3">February 2023</th>
+      <th colspan="3">March 2023</th>
+      <th colspan="3">April 2023</th>
+    </tr>
+    <tr>
+      <th>Total Income</th>
+      <th>Total Expense</th>
+      <th>Balance</th>
+      <th>Total Income</th>
+      <th>Total Expense</th>
+      <th>Balance</th>
+      <th>Total Income</th>
+      <th>Total Expense</th>
+      <th>Balance</th>
+      <th>Total Income</th>
+      <th>Total Expense</th>
+      <th>Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for trans_mode, months in summary.items %}
+      <tr>
+        <td>{% if trans_mode == 'Cash' %} colspan="3"{% endif %}>{{ trans_mode }}
+        {% for month, data in months.items %}
+          <td>{{ data.total_income }}</td>
+          <td>{{ data.total_expense }}</td>
+          <td>{{ data.balance }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{{ summary }}
+{% endblock %}
