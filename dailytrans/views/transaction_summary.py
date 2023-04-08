@@ -1,50 +1,47 @@
-from datetime import date
-from django.db.models import Sum
+from django.db.models import Case, Sum, Value, When
+from django.db.models.functions import TruncMonth
+from django.db import models
+from django.shortcuts import render
 from dailytrans.models import Transactions
 
-# Define the list of transaction modes
-trans_modes = ['Cash', 'ENBD', 'NoL', 'Pay IT', 'SIB']
 
-# Define the list of months to include in the summary
-start_date = date(2023, 1, 1)
-end_date = date(2023, 4, 30)
-months = []
-current_month = start_date
-while current_month <= end_date:
-    months.append(current_month)
-    year = current_month.year
-    month = current_month.month + 1
-    if month > 12:
-        year += 1
-        month = 1
-    current_month = date(year, month, 1)
+def transaction_summary(request):
+    totals = Transactions.objects.annotate(
+        month=TruncMonth('trans_date')
+    ).values(
+        'month', 'trans_mode'
+    ).annotate(
+        tot=Sum('trans_amount'),
+        trans_income=Sum(Case(
+            When(trans_amount__gt=0, then='trans_amount'),
+            default=Value(0),
+            output_field=models.DecimalField()
+        )),
+        trans_expense=Sum(Case(
+            When(trans_amount__lt=0, then='trans_amount'),
+            default=Value(0),
+            output_field=models.DecimalField()
+        )),
+        balance=Sum('trans_amount'),
+    ).order_by()
 
-# Initialize the summary as a list of dictionaries
-summary = []
-for month in months:
-    month_summary = {'month': month.strftime('%B %Y')}
-    for mode in trans_modes:
-        total_income = Transactions.objects.filter(
-            trans_date__year=month.year,
-            trans_date__month=month.month,
-            trans_mode=mode,
-            trans_type='income'
-        ).aggregate(Sum('trans_amount'))['trans_amount__sum'] or 0
-        print(total_income)
-        total_expense = Transactions.objects.filter(
-            trans_date__year=month.year,
-            trans_date__month=month.month,
-            trans_mode=mode,
-            trans_type='expense'
-        ).aggregate(Sum('trans_amount'))['trans_amount__sum'] or 0
-        balance = total_income - total_expense
-        month_summary[mode] = {
-            'total_income': total_income,
-            'total_expense': total_expense,
-            'balance': balance
-        }
-    summary.append(month_summary)
+    # Create a dictionary to hold the data
+    data = {}
 
-    # Return the summary dictionary
-    return render(request, 'test3.html', {'summary': summary})
+    # Loop through the query results and populate the dictionary
+    for row in totals:
+        month = row['month'].strftime('%b %Y')
+        trans_mode = row['trans_mode']
+        if month not in data:
+            data[month] = {}
+        if trans_mode not in data[month]:
+            data[month][trans_mode] = {}
+        data[month][trans_mode]['trans_income'] = row['trans_income']
+        data[month][trans_mode]['trans_expense'] = row['trans_expense']
+        data[month][trans_mode]['balance'] = row['balance']
+
+    cols = ['Cash', 'ENBD', 'NoL', 'PayIT', 'SIB']
+    # Pass the dictionary to the template for rendering
+    return render(request, 'transaction_summary.html', {'data': data, 'cols': cols})
+
 
