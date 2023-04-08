@@ -66,4 +66,4 @@ def get_item(dictionary, key):
 
 @register.filter
 def get_filter(data, key):
-    return data.get(key, '')
+    return data.get(key)

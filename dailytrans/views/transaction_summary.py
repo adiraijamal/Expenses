@@ -1,47 +1,50 @@
-import calendar
+from datetime import date
 from django.db.models import Sum
-from django.shortcuts import render
 from dailytrans.models import Transactions
 
+# Define the list of transaction modes
+trans_modes = ['Cash', 'ENBD', 'NoL', 'Pay IT', 'SIB']
 
-def transaction_summary(request):
-    months = Transactions.objects.values('trans_date__month').distinct()
-    data = {}
-    running_total = 0
-    running_total_modes = {}
-    for obj in months:
-        month = calendar.month_name[obj['trans_date__month']]
-        qs = (
-            Transactions.objects
-            .filter(trans_date__month=obj['trans_date__month'])
-            .order_by('trans_id', 'trans_date')  # Add ordering to ensure correct running total
-        )
-        total_modes = {}
-        for trans in qs:
-            running_total += trans.trans_amount
-            trans.running_total = running_total
-            # Update running total for each trans_mode
-            mode_total = running_total_modes.get(trans.trans_mode, 0)
-            mode_total += trans.trans_amount
-            running_total_modes[trans.trans_mode] = mode_total
-            trans.running_total_modes = mode_total
-            # Update total modes for this month
-            mode_month_total = total_modes.get(trans.trans_mode, 0)
-            mode_month_total += trans.trans_amount
-            total_modes[trans.trans_mode] = mode_month_total
+# Define the list of months to include in the summary
+start_date = date(2023, 1, 1)
+end_date = date(2023, 4, 30)
+months = []
+current_month = start_date
+while current_month <= end_date:
+    months.append(current_month)
+    year = current_month.year
+    month = current_month.month + 1
+    if month > 12:
+        year += 1
+        month = 1
+    current_month = date(year, month, 1)
 
-        amount = qs.aggregate(total=Sum('trans_amount'))
-
-        # Add this month's data to the overall data dictionary
-        data[obj['trans_date__month']] = {
-            'month': month,
-            'qs': qs,
-            'total': amount['total'],
-            'total_modes': total_modes,
-            'running_total': running_total,
-            'running_total_modes': running_total_modes.copy()  # Make a copy to avoid modifying the running total dict
+# Initialize the summary as a list of dictionaries
+summary = []
+for month in months:
+    month_summary = {'month': month.strftime('%B %Y')}
+    for mode in trans_modes:
+        total_income = Transactions.objects.filter(
+            trans_date__year=month.year,
+            trans_date__month=month.month,
+            trans_mode=mode,
+            trans_type='income'
+        ).aggregate(Sum('trans_amount'))['trans_amount__sum'] or 0
+        print(total_income)
+        total_expense = Transactions.objects.filter(
+            trans_date__year=month.year,
+            trans_date__month=month.month,
+            trans_mode=mode,
+            trans_type='expense'
+        ).aggregate(Sum('trans_amount'))['trans_amount__sum'] or 0
+        balance = total_income - total_expense
+        month_summary[mode] = {
+            'total_income': total_income,
+            'total_expense': total_expense,
+            'balance': balance
         }
+    summary.append(month_summary)
 
-    context = {'data': data}
+    # Return the summary dictionary
+    return render(request, 'test3.html', {'summary': summary})
 
-    return render(request, 'test2.html', context)

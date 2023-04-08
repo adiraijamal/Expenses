@@ -2,9 +2,10 @@
 
 {% block content %}
 <body>
-  <h1>Monthly Report</h1>
   {% for key, value in data.items %}
-    <h3>{{ value.month }} Total: <a style="color: {% if value.total < 0 %}red{% else %}green{% endif %}">{{ value.total | floatformat:"2g" }}</a>
+    {% if not forloop.first %}<div class="page-break"></div>{% endif %}
+    <h1>Monthly Report - {{ value.month }}</h1>
+    <h3>Total: <a style="color: {% if value.total < 0 %}red{% else %}green{% endif %}">{{ value.total | floatformat:"2g" }}</a>
     <a style="float:right"> Balance:  {{ value.monthly_balance | floatformat:"2g" }}</a></h3>
     <table border="2" style="width: 100%; border-collapse: collapse;">
       <thead>
@@ -32,26 +33,25 @@
             <td style="color: {% if trans.running_total < 0 %}red{% else %}green{% endif %}">{{ trans.running_total | floatformat:"2g"  }}</td>
           </tr>
           {% if forloop.last %}
-            <tr>
-              <td colspan="5"><b>Total:</b></td>
-              <td><b>{{ value.monthly_balance | floatformat:"2g"  }}</b></td>
-            </tr>
-        <table border="2">
-            <tr>
-              <td>Cash</td>
-              <td>Enbd</td>
-              <td>NoL</td>
-              <td>Pay IT</td>
-              <td>SIB</td>
-            </tr>
-            <tr>
-              <td><b>{{ value.running_total_modes.Cash | floatformat:"2g" }}</b></td>
-              <td><b>{{ value.running_total_modes.ENBD | floatformat:"2g" }}</b></td>
-              <td><b>{{ value.running_total_modes.NoL | floatformat:"2g" }}</b></td>
-              <td><b>{{ value.running_total_modes.PayIT | floatformat:"2g" }}</b></td>
-              <td><b>{{ value.running_total_modes.SIB | floatformat:"2g" }}</b></td>
-            </tr>
-          </table>
+        <br><br>
+          <table border="2">
+              <tr>
+                <td>Cash</td>
+                <td>Enbd</td>
+                <td>NoL</td>
+                <td>Pay IT</td>
+                <td>SIB</td>
+                <td>Total</td>
+              </tr>
+              <tr>
+                <td><b>{{ value.running_total_modes.Cash | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total_modes.ENBD | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total_modes.NoL | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total_modes.PayIT | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total_modes.SIB | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total | floatformat:"2g" }}</b></td>
+              </tr>
+            </table>
           {% endif %}
         {% endfor %}
       </tbody>
@@ -59,3 +59,8 @@
   {% endfor %}
 </body>
 {% endblock %}
+<style>
+  .page-break {
+    page-break-before: always;
+  }
+</style>
