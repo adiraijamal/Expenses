@@ -6,6 +6,9 @@ from dailytrans.models import Transactions
 
 
 def transaction_summary(request):
+    cols = [{'name': 'Cash', 'label': 'Cash'}, {'name': 'ENBD', 'label': 'ENBD'}, {'name': 'NoL', 'label': 'NoL'},
+            {'name': 'Pay IT', 'label': 'Pay IT'}, {'name': 'SIB', 'label': 'SIB'}]
+
     totals = Transactions.objects.annotate(
         month=TruncMonth('trans_date')
     ).values(
@@ -25,6 +28,8 @@ def transaction_summary(request):
         balance=Sum('trans_amount'),
     ).order_by()
 
+    total_modes = Transactions.objects.values('trans_mode').annotate(balance=Sum('trans_amount'))
+
     # Create a dictionary to hold the data
     data = {}
 
@@ -40,8 +45,14 @@ def transaction_summary(request):
         data[month][trans_mode]['trans_expense'] = row['trans_expense']
         data[month][trans_mode]['balance'] = row['balance']
 
-    cols = ['Cash', 'ENBD', 'NoL', 'PayIT', 'SIB']
+    # Add the total_modes to the data dictionary
+    for rows in total_modes:
+        trans_modes = rows['trans_mode']
+        if 'Total' not in data:
+            data['Total'] = {}
+        if trans_modes not in data['Total']:
+            data['Total'][trans_modes] = {}
+        data['Total'][trans_modes]['balance'] = rows['balance']
+
     # Pass the dictionary to the template for rendering
-    return render(request, 'transaction_summary.html', {'data': data, 'cols': cols})
-
-
+    return render(request, 'transaction_summary.html', {'data': data, 'cols': cols, 'total_modes': total_modes})

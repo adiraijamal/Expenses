@@ -1,7 +1,7 @@
 from django.db import models
 
-
 # Create your models here.
+
 
 class MainCategory(models.Model):
     main_id = models.AutoField(primary_key=True)
@@ -13,6 +13,8 @@ class MainCategory(models.Model):
     class Meta:
         verbose_name = "Main Category"
         verbose_name_plural = "Main Categories"
+
+    objects = models.Manager()
 
 
 class SubCategory(models.Model):
@@ -26,6 +28,8 @@ class SubCategory(models.Model):
         verbose_name = "Sub Category"
         verbose_name_plural = "Sub Categories"
 
+    objects = models.Manager()
+
 
 class Transactions(models.Model):
     TRANSACTION_TYPE_CHOICES = (
@@ -36,8 +40,8 @@ class Transactions(models.Model):
     PAYMENT_MODE_CHOICES = (
         ('cash', 'Cash'),
         ('enbd', 'ENBD'),
-        ('nol', 'NOL'),
-        ('payit', 'Pay IT'),
+        ('nol', 'NoL'),
+        ('payit', 'PayIT'),
         ('sib', 'SIB'),
     )
 
@@ -59,10 +63,9 @@ class Transactions(models.Model):
         verbose_name_plural = "Transactions"
 
     def __str__(self):
-        amount = self.trans_amount
+        amount_str = "${:,.2f}".format(self.trans_amount)
         if self.trans_type == 'expense':
-            amount = -amount
-            amount_str = f"${amount:,.2f}"
+            amount_str = "-{}".format(amount_str)
 
         return (
             f"Transaction ID: {self.trans_id}\n"
@@ -71,5 +74,5 @@ class Transactions(models.Model):
             f"Main Category: {self.trans_main_category}\n"
             f"Sub Category: {self.trans_sub_category}\n"
             f"Payment Mode: {self.trans_mode}\n"
-            f"Amount: ${self.trans_amount:,.2f}"
+            f"Amount: {amount_str}"
         )
