@@ -31,11 +31,11 @@ def transaction_summary(request):
     total_modes = Transactions.objects.values('trans_mode').annotate(balance=Sum('trans_amount'))
 
     # Create a dictionary to hold the data
-    data = {}
+    data = {'Account': {}}
 
     # Loop through the query results and populate the dictionary
     for row in totals:
-        month = row['month'].strftime('%b %Y')
+        month = row['month'].strftime('%B %Y')
         trans_mode = row['trans_mode']
         if month not in data:
             data[month] = {}

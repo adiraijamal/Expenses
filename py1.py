@@ -8,6 +8,7 @@ from dailytrans.models import Transactions
 import calendar
 from django.db.models import Sum
 
+
 def process_transactions():
     # loop through each month and calculate income, expense and balance for each transaction mode
     for month in months:
@@ -21,7 +22,7 @@ def process_transactions():
         data[month_name] = {}
 
         # loop through each transaction mode and calculate income, expense and balance
-        for mode in Transactions.TRANSACTIONS_MODE_CHOICES:
+        for mode in Transactions.PAYMENT_MODE_CHOICES:
             mode_name = mode[1]
             mode_transactions = transactions.filter(trans_mode=mode[0])
             total_income = mode_transactions.filter(trans_amount__gt=0).aggregate(Sum('trans_amount'))['trans_amount__sum'] or Decimal('0')
