@@ -21,12 +21,6 @@
                     <td>{{ values.balance | cf | safe }}</td>
                 </tr>
             {% endfor %}
-            <tr>
-      <td>Total</td>
-      <td>{% for mode in total_modes %}{% if mode.trans_mode == 'Cash' %}{{ mode.balance|cf|safe }}{% endif %}{% endfor %}</td>
-      <td>{% for mode in total_modes %}{% if mode.trans_mode == 'Cash' %}-{{ mode.balance|cf|safe }}{% endif %}{% endfor %}</td>
-      <td>{{ data.Total.Cash.balance|cf|safe }}</td>
-    </tr>
         </table>
     </div>
 {% endfor %}

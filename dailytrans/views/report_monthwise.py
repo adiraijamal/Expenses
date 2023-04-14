@@ -26,7 +26,7 @@ def report_monthwise(request):
             mode_total = running_total_modes.get(trans.trans_mode, 0)
             mode_total += trans.trans_amount
             running_total_modes[trans.trans_mode] = mode_total
-            trans.running_total_modes = mode_total
+            trans.running_total_modes = f"{mode_total}|{trans.trans_mode}"
             # Update total modes for this month
             mode_month_total = total_modes.get(trans.trans_mode, 0)
             mode_month_total += trans.trans_amount

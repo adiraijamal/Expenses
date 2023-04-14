@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-
+{% load utils %}
 {% block content %}
 <body>
   {% for key, value in data.items %}
     {% if not forloop.first %}<div class="page-break"></div>{% endif %}
     <h1>Monthly Report - {{ value.month }}</h1>
-    <h3>Total: <a style="color: {% if value.total < 0 %}red{% else %}green{% endif %}">{{ value.total | floatformat:"2g" }}</a>
-    <a style="float:right"> Balance:  {{ value.monthly_balance | floatformat:"2g" }}</a></h3>
+    <h3>Total: <a>{{ value.total | cf | safe }}</a>
+    <a style="float:right"> Balance:  {{ value.monthly_balance | cf | safe }}</a></h3>
     <table border="2" style="width: 100%; border-collapse: collapse;">
       <thead>
         <tr>
@@ -14,7 +14,7 @@
           <th>Date</th>
           <th>Pay Mode</th>
           <th>Category</th>
-          <th>Sub Details</th>
+          <th>Sub Category</th>
           <th>Amount</th>
           <th>Mode Wise</th>
           <th>Running Total</th>
@@ -28,12 +28,11 @@
             <td>{{ trans.trans_mode }}</td>
             <td>{{ trans.trans_main_category }}</td>
             <td>{{ trans.trans_sub_category }}</td>
-            <td style="color: {% if trans.trans_amount < 0 %}red{% else %}green{% endif %}">{{ trans.trans_amount | floatformat:'2g' }}</td>
-            <td style="color: {% if trans.running_total_modes < 0 %}red{% else %}green{% endif %}">{{ trans.running_total_modes | floatformat:"2g" }}</td>
-            <td style="color: {% if trans.running_total < 0 %}red{% else %}green{% endif %}">{{ trans.running_total | floatformat:"2g"  }}</td>
+            <td>{{ trans.trans_amount | cf | safe }}</td>
+            <td>{{ trans.running_total_modes | cf_mode | safe }}</td>
+            <td>{{ trans.running_total | cf | safe }}</td>
           </tr>
           {% if forloop.last %}
-        <br><br>
           <table border="2">
               <tr>
                 <td>Cash</td>
@@ -44,23 +43,19 @@
                 <td>Total</td>
               </tr>
               <tr>
-                <td><b>{{ value.running_total_modes.Cash | floatformat:"2g" }}</b></td>
-                <td><b>{{ value.running_total_modes.ENBD | floatformat:"2g" }}</b></td>
-                <td><b>{{ value.running_total_modes.NoL | floatformat:"2g" }}</b></td>
-                <td><b>{{ value.running_total_modes.PayIT | floatformat:"2g" }}</b></td>
-                <td><b>{{ value.running_total_modes.SIB | floatformat:"2g" }}</b></td>
-                <td><b>{{ value.running_total | floatformat:"2g" }}</b></td>
+                <td><b>{{ value.running_total_modes.Cash | cf | safe }}</b></td>
+                <td><b>{{ value.running_total_modes.ENBD | cf | safe }}</b></td>
+                <td><b>{{ value.running_total_modes.NoL | cf | safe }}</b></td>
+                <td><b>{{ value.running_total_modes.PayIT | cf | safe  }}</b></td>
+                <td><b>{{ value.running_total_modes.SIB | cf | safe  }}</b></td>
+                <td><b>{{ value.running_total | cf | safe  }}</b></td>
               </tr>
             </table>
           {% endif %}
         {% endfor %}
       </tbody>
-    </table>
+      </table>
+  <hr style="border: 2px solid black; display: block;"> <!-- Add a horizontal line here -->
   {% endfor %}
 </body>
 {% endblock %}
-<style>
-  .page-break {
-    page-break-before: always;
-  }
-</style>

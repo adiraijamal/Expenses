@@ -7,7 +7,7 @@ from dailytrans.models import Transactions
 
 def transaction_summary(request):
     cols = [{'name': 'Cash', 'label': 'Cash'}, {'name': 'ENBD', 'label': 'ENBD'}, {'name': 'NoL', 'label': 'NoL'},
-            {'name': 'Pay IT', 'label': 'Pay IT'}, {'name': 'SIB', 'label': 'SIB'}]
+            {'name': 'PayIT', 'label': 'PayIT'}, {'name': 'SIB', 'label': 'SIB'}]
 
     totals = Transactions.objects.annotate(
         month=TruncMonth('trans_date')
@@ -31,7 +31,7 @@ def transaction_summary(request):
     total_modes = Transactions.objects.values('trans_mode').annotate(balance=Sum('trans_amount'))
 
     # Create a dictionary to hold the data
-    data = {'Account': {}}
+    data = {}
 
     # Loop through the query results and populate the dictionary
     for row in totals:

@@ -1,0 +1,134 @@
+            <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        border: 2px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      li {
+        float: left;
+        border-right:1px solid #bbb;
+      }
+
+      li:last-child {
+        border-right: none;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      li a:hover:not(.active) {
+        background-color: #111;
+      }
+
+      .active {
+        background-color: #04AA6D;
+      }
+
+      .navbar-menu {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .navbar-menu li:last-child {
+        margin-left: auto;
+      }
+
+      /* Set the navbar to be fixed to the top */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        background-color: #f8f8f8;
+      }
+
+      /* Add some padding to the content below the navbar */
+      .content {
+        padding-top: 60px; /* Adjust this value according to your navbar height */
+      }
+
+      /* Hide the navbar when printing */
+      @media print {
+        .navbar {
+          display: none;
+        }
+      }
+
+        .red-text {
+          color: red;
+        }
+
+        .green-text {
+          color: green;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .month-table {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .month-title {
+            background-color:  #0000ff;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .account-name {
+            font-weight: bold;
+        }
+
+        .total-table {
+            margin-top: 30px;
+            width: 50%;
+        }
+
+        .total-title {
+            background-color:  #0000ff;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+    </style>
